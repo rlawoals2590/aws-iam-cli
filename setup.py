@@ -14,7 +14,7 @@ setup(
     license='MIT',
     entry_points={
         'console_scripts': [
-            'iam-cli=iam-cli.main:main'
+            'iam-cli=iam_cli.main:main'
         ]
     },
     install_requires=requires,
