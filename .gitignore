@@ -4,6 +4,7 @@
 
 .vscode/
 *.csv
+iam-cli/.DS_Store
 
 .idea
 *.yaml
