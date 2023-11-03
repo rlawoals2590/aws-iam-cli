@@ -1,8 +1,8 @@
 import argparse
 import sys
 
-from command import process_csv, create_cloudformation_yaml
-from __init__ import VERSION
+from iam_cli.command import process_csv, create_cloudformation_yaml
+from iam_cli.__init__ import VERSION
 
 
 def get_arguments():

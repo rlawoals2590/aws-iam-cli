@@ -1,6 +1,6 @@
 import csv
 import yaml
-from tools import print_figlet
+from iam_cli.tools import print_figlet
 
 print_figlet()
 
