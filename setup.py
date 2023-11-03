@@ -7,7 +7,7 @@ requires = [
 
 setup(
     name='aws-iam-cli',
-    version='0.0.3',
+    version='0.0.4',
     author='JaeMin',
     description='AWS IAM CloudFormation Stack Generator',
     author_email='tuiab25906370@gmail.com',
