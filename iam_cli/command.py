@@ -48,7 +48,7 @@ class Command:
         questions = [
             List(
                 name='csv_files',
-                message='csv 파일을 선택하세요. (학생 컬럼 - 학번, 이름 / 선생님 컬럼 - 이름) ' ,
+                message='csv 파일을 선택하세요.' ,
                 choices=self.csv_files_list
             )
         ]

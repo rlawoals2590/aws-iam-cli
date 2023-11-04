@@ -97,7 +97,7 @@ class CreateYAML:
     def create_yaml(self):
         template = {
             'AWSTemplateFormatVersion': '2010-09-09',
-            'Description': 'VPC Stack Generator CLI',
+            'Description': 'IAM Stack Generator CLI',
             'Resources': self.resources
         }
 

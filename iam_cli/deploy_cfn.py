@@ -70,7 +70,7 @@ class DeployCfn:
                     print()
                     print(f'{bright_red("Failed!")}')
                     print()
-                    print(f'{bright_red("CloudFormation을 여기서 에러 로그를 확인해보세요!:")}')
+                    print(f'{bright_red("해당 에러 로그를 아래 URL로 접속하여 확인하세요")}')
                     print()
                     print(
                         f'{bright_red(f"https://{region}.console.aws.amazon.com/cloudformation/home?region={region}#/stacks/stackinfo?stackId={stack_id}")}')
