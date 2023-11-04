@@ -5,10 +5,10 @@ from botocore.config import Config
 from inquirer import List, prompt, Confirm, Text
 from datetime import datetime
 
-from tools import print_figlet
-from create_yaml import CreateYAML
-from deploy_cfn import DeployCfn
-from validators import stack_name_validator
+from iam_cli.tools import print_figlet
+from iam_cli.create_yaml import CreateYAML
+from iam_cli.deploy_cfn import DeployCfn
+from iam_cli.validators import stack_name_validator
 
 
 class Command:
