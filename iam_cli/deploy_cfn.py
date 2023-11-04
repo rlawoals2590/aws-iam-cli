@@ -28,7 +28,7 @@ class DeployCfn:
         questions = [
             Confirm(
                 name='required',
-                message='Do you want to deploy using CloudFormation in here?',
+                message='iam_users.yaml 파일을 CloudFormation에 배포하길 원하신가요?',
                 default=True
             )
         ]
@@ -39,7 +39,7 @@ class DeployCfn:
         questions = [
             Text(
                 name='name',
-                message='Type CloudFormation Stack name',
+                message='CloudFormation 스택 이름을 지정해주세요',
                 validate=lambda _, x: stack_name_validator(x, self.region, self.profile)
             )
         ]
@@ -70,7 +70,7 @@ class DeployCfn:
                     print()
                     print(f'{bright_red("Failed!")}')
                     print()
-                    print(f'{bright_red("Please check CloudFormation at here:")}')
+                    print(f'{bright_red("CloudFormation을 여기서 에러 로그를 확인해보세요!:")}')
                     print()
                     print(
                         f'{bright_red(f"https://{region}.console.aws.amazon.com/cloudformation/home?region={region}#/stacks/stackinfo?stackId={stack_id}")}')
@@ -88,8 +88,8 @@ class DeployCfn:
                     visualizer(client=self.client, stack_name=self.name)
 
         else:
-            print('Done!\n\n')
-            print('You can deploy IAM using AWS CLI\n\n\n')
+            print('끝났습니다!\n\n')
+            print('해당 AWS CLI를 사용해서 IAM User를 배포할 수 있습니다!\n\n\n')
             print(
                 'aws cloudformation deploy --stack-name {} --region {} --template-file ./iam_users.yaml'.format(
                     name, region))
