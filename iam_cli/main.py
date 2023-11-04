@@ -1,8 +1,8 @@
 import argparse
 import sys
 
-from iam_cli.command import Command
-from iam_cli import VERSION
+from command import Command
+from iam_cli.__init__ import VERSION
 
 
 def get_arguments():

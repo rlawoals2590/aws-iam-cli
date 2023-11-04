@@ -5,10 +5,10 @@ from botocore.config import Config
 from inquirer import List, prompt, Confirm, Text
 from datetime import datetime
 
-from iam_cli.tools import print_figlet
-from iam_cli.create_yaml import CreateYAML
-from iam_cli.deploy_cfn import DeployCfn
-from iam_cli.validators import stack_name_validator
+from tools import print_figlet
+from create_yaml import CreateYAML
+from deploy_cfn import DeployCfn
+from validators import stack_name_validator
 
 
 class Command:
@@ -17,11 +17,14 @@ class Command:
     num = None
     num_name = None
     created_date = None
+    name = None
 
     csv_files_list = []
     choose_csv_file = None
     student_info = {}
     student_list = []
+    teacher_info = {}
+    teacher_list = []
     now = datetime.now()
 
     def __init__(self):
@@ -30,7 +33,7 @@ class Command:
         self.choose_csv_files()
         self.process_csv()
 
-        yaml_file = CreateYAML(student_list=self.student_list)
+        yaml_file = CreateYAML(student_list=self.student_list, teacher_list=self.teacher_list)
         yaml_file.create_yaml()
         DeployCfn()
 
@@ -58,22 +61,39 @@ class Command:
         with open(self.choose_csv_file, mode='r', encoding='utf-8') as csv_file:
             reader = csv.DictReader(csv_file)
 
-            for row in reader:
-                self.ban = row['학번'][2]
+            if self.choose_csv_file.startswith('student'):
+                print(self.choose_csv_file)
                 self.role = 'student'
-                self.num = str(row['학번'])
-                self.num_name = str(row['학번']) + str(row['이름'])
-                self.created_date = self.now.strftime("%Y-%m-%d")
 
-                self.student_info = {
-                    'ban': self.ban,
-                    'role': self.role,
-                    'num': self.num,
-                    'num_name': self.num_name,
-                    'created_date': self.created_date
-                }
+                for row in reader:
+                    self.ban = row['학번'][2]
+                    self.num = str(row['학번'])
+                    self.num_name = str(row['학번']) + str(row['이름'])
+                    self.created_date = self.now.strftime("%Y-%m-%d")
 
-                self.student_list.append(self.student_info)
+                    self.student_info = {
+                        'ban': self.ban,
+                        'role': self.role,
+                        'num': self.num,
+                        'num_name': self.num_name,
+                        'created_date': self.created_date
+                    }
+
+                    self.student_list.append(self.student_info)
+            elif self.choose_csv_file.startswith('teacher'):
+                self.role = 'teacher'
+
+                for row in reader:
+                    self.name = row['이름']
+                    self.created_date = self.now.strftime("%Y-%m-%d")
+
+                    self.teacher_info = {
+                        'name': self.name,
+                        'role': self.role,
+                        'created_date': self.created_date
+                    }
+
+                    self.teacher_list.append(self.teacher_info)
 
     def create_stack(self):
         questions = [

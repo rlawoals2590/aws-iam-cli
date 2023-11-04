@@ -19,3 +19,7 @@ git push
 
 git tag -a v${VERSION} -m "Release ${VERSION}"
 git push origin v${VERSION}
+
+sed -i '' "s/$VERSION/<VERSION>/" "$TARGET_FILE" 
+sed -i '' "s/$VERSION/<VERSION>/" "$TARGET_FILE2" 
+sed -i '' "s/$VERSION/<VERSION>/" "$TARGET_FILE3" 
