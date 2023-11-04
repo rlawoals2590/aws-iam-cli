@@ -5,8 +5,8 @@ from inquirer import prompt, Confirm, Text
 from prettytable import PrettyTable
 from cfn_visualizer import visualizer
 
-from validators import stack_name_validator
-from tools import bright_red, bright_green
+from iam_cli.validators import stack_name_validator
+from iam_cli.tools import bright_red, bright_green
 
 
 class DeployCfn:
