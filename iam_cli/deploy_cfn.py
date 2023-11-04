@@ -89,7 +89,7 @@ class DeployCfn:
 
         else:
             print('Done!\n\n')
-            print('You can deploy VPC using AWS CLI\n\n\n')
+            print('You can deploy IAM using AWS CLI\n\n\n')
             print(
                 'aws cloudformation deploy --stack-name {} --region {} --template-file ./iam_users.yaml'.format(
                     name, region))
