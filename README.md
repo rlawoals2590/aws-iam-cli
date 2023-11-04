@@ -11,5 +11,5 @@ pip install aws-iam-cli
 
 iam-cli --version
 
-iam-cli test.csv
+iam-cli student.csv & teacher.csv
 ```
