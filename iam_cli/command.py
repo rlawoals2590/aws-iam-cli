@@ -48,7 +48,7 @@ class Command:
         questions = [
             List(
                 name='csv_files',
-                message='csv 파일을 선택하세요.' ,
+                message='csv 파일을 선택하세요' ,
                 choices=self.csv_files_list
             )
         ]
@@ -62,7 +62,6 @@ class Command:
             reader = csv.DictReader(csv_file)
 
             if self.choose_csv_file.startswith('student'):
-                print(self.choose_csv_file)
                 self.role = 'student'
 
                 for row in reader:

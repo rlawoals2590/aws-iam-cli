@@ -28,7 +28,7 @@ class DeployCfn:
         questions = [
             Confirm(
                 name='required',
-                message='iam_users.yaml 파일을 CloudFormation에 배포하길 원하신가요?',
+                message='CloudFormation에 바로 배포하길 원하신가요?',
                 default=True
             )
         ]
