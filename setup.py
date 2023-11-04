@@ -2,12 +2,13 @@ from setuptools import setup, find_packages
 
 requires = [
     'PyYAML>=6.0.1',
-    'pyfiglet>=1.0.2'
+    'pyfiglet>=1.0.2',
+    'inquirer>=3.1.3'
 ]
 
 setup(
     name='aws-iam-cli',
-    version='0.0.4',
+    version='0.0.5',
     author='JaeMin',
     description='AWS IAM CloudFormation Stack Generator',
     author_email='tuiab25906370@gmail.com',

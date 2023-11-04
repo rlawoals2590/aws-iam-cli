@@ -1,8 +1,8 @@
 import argparse
 import sys
 
-from iam_cli.command import process_csv, create_cloudformation_yaml
-from iam_cli.__init__ import VERSION
+from iam_cli.command import Command
+from iam_cli import VERSION
 
 
 def get_arguments():
@@ -10,11 +10,6 @@ def get_arguments():
     parser.add_argument('-p', '--profile', dest='profile', action='store', default='default',
                         help='use aws credential profile.')
     parser.add_argument('-v', '--version', action='version', version=f'iam-cli v{VERSION}')
-    parser.add_argument(
-        'csvfile',
-        type=argparse.FileType('r', encoding='UTF-8'),
-        help='The CSV file containing IAM users information.'
-    )
     
     return parser
 
@@ -22,11 +17,8 @@ def get_arguments():
 def main():
     try:
         parser = get_arguments()
-        args = parser.parse_args()
 
-        # CSV 파일 처리
-        users = process_csv(args.csvfile)
-        create_cloudformation_yaml(users)
+        Command()
     except KeyboardInterrupt:
         print('Cancelled by user.')
         sys.exit()

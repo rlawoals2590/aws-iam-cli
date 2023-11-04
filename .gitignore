@@ -5,6 +5,7 @@
 .vscode/
 *.csv
 iam-cli/.DS_Store
+iam-cli/test.py
 
 .idea
 *.yaml
