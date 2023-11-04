@@ -91,7 +91,7 @@ class DeployCfn:
             print('Done!\n\n')
             print('You can deploy VPC using AWS CLI\n\n\n')
             print(
-                'aws cloudformation deploy --stack-name {} --region {} --template-file ./vpc.yaml'.format(
+                'aws cloudformation deploy --stack-name {} --region {} --template-file ./iam_users.yaml'.format(
                     name, region))
             
     def get_template(self):
