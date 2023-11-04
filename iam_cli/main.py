@@ -1,14 +1,12 @@
 import argparse
 import sys
 
-from iam_cli.command import Command
-from iam_cli import VERSION
+from command import Command
+from __init__ import VERSION
 
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="Process a CSV file for IAM users.")
-    parser.add_argument('-p', '--profile', dest='profile', action='store', default='default',
-                        help='use aws credential profile.')
     parser.add_argument('-v', '--version', action='version', version=f'iam-cli v{VERSION}')
     
     return parser
@@ -17,6 +15,7 @@ def get_arguments():
 def main():
     try:
         parser = get_arguments()
+        args = parser.parse_args()  # 인자를 파싱하는 부분을 추가함
 
         Command()
     except KeyboardInterrupt:

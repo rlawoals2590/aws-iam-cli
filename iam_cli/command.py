@@ -1,14 +1,26 @@
+import boto3
 import csv
-import yaml
 import glob
-from inquirer import List, prompt
+from botocore.config import Config
+from inquirer import List, prompt, Confirm, Text
 from datetime import datetime
 
-from iam_cli.tools import print_figlet
+from tools import print_figlet
+from create_yaml import CreateYAML
+from deploy_cfn import DeployCfn
+from validators import stack_name_validator
+
 
 class Command:
+    ban = None
+    role = None
+    num = None
+    num_name = None
+    created_date = None
+
     csv_files_list = []
     choose_csv_file = None
+    student_info = {}
     student_list = []
     now = datetime.now()
 
@@ -17,7 +29,10 @@ class Command:
         self.get_csv_files()
         self.choose_csv_files()
         self.process_csv()
-        self.create_cloudformation_yaml()
+
+        yaml_file = CreateYAML(student_list=self.student_list)
+        yaml_file.create_yaml()
+        DeployCfn()
 
     def get_csv_files(self):
         csv_files = glob.glob('*.csv')
@@ -44,76 +59,52 @@ class Command:
             reader = csv.DictReader(csv_file)
 
             for row in reader:
-                ban = row['학번'][2]
-                role = 'student'
-                num = str(row['학번'])
-                num_name = str(row['학번']) + str(row['이름'])
-                created_date = self.now.strftime("%Y-%m-%d")
+                self.ban = row['학번'][2]
+                self.role = 'student'
+                self.num = str(row['학번'])
+                self.num_name = str(row['학번']) + str(row['이름'])
+                self.created_date = self.now.strftime("%Y-%m-%d")
 
-                student_info = {
-                    'ban': ban,
-                    'role': role,
-                    'num': num,
-                    'num_name': num_name,
-                    'created_date': created_date
+                self.student_info = {
+                    'ban': self.ban,
+                    'role': self.role,
+                    'num': self.num,
+                    'num_name': self.num_name,
+                    'created_date': self.created_date
                 }
 
-                self.student_list.append(student_info)
+                self.student_list.append(self.student_info)
 
-    def create_cloudformation_yaml(self, output_file='iam_users.yaml'):
-        resources = {}
-        groups = set()
-        count = 0
+    def create_stack(self):
+        questions = [
+            Confirm(
+                name='deploy',
+                message='Do you want to deploy stack in \033[1m\033[96m{}\033[0mtest?'.format(self.region),
+                default=True
+            )
+        ]
 
-        for user in self.student_list:
-            ban = user['ban']
-            role = user['role']
-            num = user['num']
-            num_name = user['num_name']
-            created_date = user['created_date']
-            groups.add(role)  # 그룹 이름을 집합에 추가하여 중복을 제거
+        answer = prompt(questions, raise_keyboard_interrupt=True)
 
-            initial_password = 'smc@' + str(num) + '!'
-            count += 1
+        if answer['deploy']:
+            questions = [
+                Text(
+                    name='stack-name',
+                    message='Type your stack name',
+                    validate=lambda _, x: stack_name_validator(x, self.region)
+                )
+            ]
 
-            # 여기서 추가적인 속성을 사용자 정의 필드로 추가할 수 있습니다.
-            resources['User' + str(count)] = {
-                'Type': 'AWS::IAM::User',
-                'Properties': {
-                    'UserName': num,
-                    'Groups': [role],
-                    'LoginProfile': {
-                        'Password': initial_password, # 초기 비밀번호 설정
-                        'PasswordResetRequired': True      # 첫 로그인 시 비밀번호 변경 요구
-                    },
-                    'Tags': [
-                        {
-                            'Key': 'Ban',
-                            'Value': ban
-                        },
-                        {
-                            'Key': 'Role',
-                            'Value': role
-                        },
-                        {
-                            'Key': 'Name',
-                            'Value': num_name
-                        },
-                        {
-                            'Key': 'Created Date',
-                            'Value': created_date
-                        }
-                    ]
-                }
-            }
-        
-        cloudformation_template = {
-            'AWSTemplateFormatVersion': '2010-09-09',
-            'Resources': resources
-        }
+            answer = prompt(questions, raise_keyboard_interrupt=True)
 
-        with open(output_file, 'w') as file:
-            yaml.dump(cloudformation_template, file, allow_unicode=True, default_flow_style=False)
+            try:
+                client = boto3.client('cloudformation', config=Config(region_name=self.region))
 
-        print("aws cloudformation deploy --stack-name aws-student-iam-cf --template-file ./iam_users.yaml --capabilities CAPABILITY_NAMED_IAM")
-        
+                response = client.create_stack(
+                    StackName=answer['stack-name'],
+                    TemplateBody='file://template.yaml'
+                )
+                stack_id = response['StackId']
+
+            except Exception as e:
+                print(e)
