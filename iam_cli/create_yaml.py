@@ -25,10 +25,9 @@ class CreateYAML:
                 self.groups.add(role)  # 그룹 이름을 집합에 추가하여 중복을 제거
 
                 initial_password = 'smc@student' + str(num) + '!'
-                self.count += 1
 
                 # 여기서 추가적인 속성을 사용자 정의 필드로 추가할 수 있습니다.
-                self.resources['Student' + str(self.count)] = {
+                self.resources['Student' + str(num)] = {
                     'Type': 'AWS::IAM::User',
                     'Properties': {
                         'UserName': 'SMC' + str(num),
