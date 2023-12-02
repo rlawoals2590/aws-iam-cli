@@ -31,7 +31,7 @@ class CreateYAML:
                 self.resources['Student' + str(self.count)] = {
                     'Type': 'AWS::IAM::User',
                     'Properties': {
-                        'UserName': 'student' + str(self.count),
+                        'UserName': 'SMC' + str(num),
                         'Groups': [role],
                         'LoginProfile': {
                             'Password': initial_password, # 초기 비밀번호 설정
